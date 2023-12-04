@@ -5,3 +5,5 @@ project:
 website:
   repo-url: https://github.com/dipernavz/dipernavz.github.io
   repo-actions: [source]
+  sidebar:
+    contents: auto
