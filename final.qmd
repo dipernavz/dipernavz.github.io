@@ -6,6 +6,7 @@ author:
 format:
     html:
         code-fold: false
+        toc: true
 jupyter: python3
 ---
 
