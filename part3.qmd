@@ -1,0 +1,89 @@
+---
+title: "Part 3"
+date: "2023-12-4"
+author:
+    - name: Vincent DiPerna
+format:
+    html:
+        code-fold: false
+jupyter: python3
+---
+
+## Linear and Nonlinear Regression
+
+### Code
+```{python}
+# Imports
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+
+np.set_printoptions(precision = 10)
+
+# Constants for test size, and random state
+TEST_SIZE = 0.2
+RANDOM_STATE = 20
+
+# Set the random seed
+np.random.seed(RANDOM_STATE)
+
+# Create a dataset of 500 points between -2pi and 2pi and their sin values
+X = np.random.uniform(-2 * np.pi, 2 * np.pi, size = (500, 1))
+y = np.sin(X)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, 
+                                                    y, 
+                                                    test_size = TEST_SIZE, 
+                                                    shuffle = True, 
+                                                    random_state = RANDOM_STATE)
+
+# Sort the test data
+indices = np.argsort(X_test, axis = 0)
+X_test_sorted = X_test[indices].ravel()
+
+# Create a figure to plot the data
+figure = plt.figure(figsize = (12, 12))
+figure.suptitle("Graphing Linear and Polynomial Regression Models for a \
+                 Sin Function with Different Degrees")
+
+# Plot the linear regression model for each degree between 1 and 9
+for degree in range(1, 10):
+    
+    # Create a linear regression model and a polynomial features model
+    regr = LinearRegression()
+    poly = PolynomialFeatures(degree = degree)
+
+    # Fit the regression model to the training data
+    X_poly = poly.fit_transform(X_train)
+
+    # Fit the polynomial features model to the training data
+    regr.fit(X_poly, y_train)
+
+    # Transform the test data
+    X_test_poly = poly.transform(X_test)
+
+    # Predict the test data
+    y_pred = regr.predict(X_test_poly)
+
+    # Sort the predicted data
+    regr_y_pred = y_pred[indices].ravel()
+
+    # Plot the data
+    ax = figure.add_subplot(3, 3, degree)
+    ax.set_title(f"{degree} Degree(s)")
+    ax.scatter(X, y, label = "Original Data", s = 10, color = "blue")
+    ax.plot(X_test_sorted, 
+            regr_y_pred, 
+            label = f"{degree} Degree Polynomial Regression Model", 
+            color = "red", 
+            linewidth = 2)
+```
+
+### Explanation
+Here we use a linear regression model to predict the sin function. We create a dataset of 500 points between -2pi and 2pi and 
+their sin values. We then split the data into training and testing sets. We then sort the test data to print a nice line graph. 
+We then create a figure to plot the data. We then plot the linear regression model for each degree between 1 and 9. We set the
+RANDOM_STATE to 20 for consistency and reproducibility. We can see that the higher the degree, the more accurate the model is.

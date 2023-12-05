@@ -1,0 +1,70 @@
+---
+title: "Part 1"
+date: "2023-12-4"
+author:
+    - name: Vincent DiPerna
+format:
+    html:
+        code-fold: false
+jupyter: python3
+---
+
+## Probability Theory and Random Variables
+
+### Code
+```{python}
+# Imports
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_digits
+from sklearn.metrics import accuracy_score, precision_score, f1_score
+from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
+
+# Constants for random state of the splitting data, and test size as a percentage
+RANDOM_STATE = 20
+TEST_SIZE = 0.2
+
+# Load the data into data, and target variables separately
+X, y = load_digits(return_X_y = True)
+
+# Split the data using train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, 
+                                                    test_size = TEST_SIZE, 
+                                                    shuffle = True, 
+                                                    random_state = RANDOM_STATE)
+
+# Instantiate a Naive Bayes Gaussian Classifier
+clf = GaussianNB()
+
+# Fit the clasifier to the training data
+clf.fit(X_train, y_train)
+
+# Predict the test data
+y_pred = clf.predict(X_test)
+
+# Print the accuracy
+print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+print(f"Precision: {precision_score(y_test, y_pred, average = 'weighted')}")
+print(f"F1 Score: {f1_score(y_test, y_pred, average = 'weighted')}")
+
+print(f"First 20 Elements of True Target Data:      {y_test[:20]}")
+print(f"First 20 Elements of Predicted Target Data: {y_pred[:20]}")
+
+# Create the confusion matrix
+cm = confusion_matrix(y_test, y_pred, labels = clf.classes_)
+
+# Plot the confusion matrix
+disp = ConfusionMatrixDisplay(confusion_matrix = cm, display_labels = clf.classes_)
+disp.plot()
+disp.ax_.set_title("Confusion Matrix for Digit Classification");
+```
+
+### Explanation
+Here we use a Naive Byaes Model to classify handwritten digits. We split the data into training and testing sets, 
+and then fit the model to the training data. We then predict the test data, and print the accuracy, precision, and 
+F1 score. We also print the first 20 elements of the true target data, and the first 20 elements of the predicted target 
+data. Finally, we plot the confusion matrix. We set a RANDOM_STATE of 20 for consistency and reproducibility. The TEST_SIZE
+was 0.2 or 20%, while training data was 80%. From the data we can see that the model is fairly accurate with accuracy of 0.886, 
+preciision of 0.900, and F1 score of 0.886. Printing out the first 20 elements, we can see that the true target data is correct 
+in 19/20 cases. Based on the confusion matrix we can see that 7 was misclassified as 4, a total of 6 times, and 2 was misclassified 
+as 8 a total of 4 times, but otherwise the model is fairly accurate with all other numbers being misclassified 4 or fewer times.

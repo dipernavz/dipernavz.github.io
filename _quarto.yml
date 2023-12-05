@@ -5,3 +5,14 @@ project:
 website:
   repo-url: https://github.com/dipernavz/dipernavz.github.io
   repo-actions: [source]
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        file: final.qmd
+      - part1.qmd
+      - part2.qmd
+      - part3.qmd
+      - part4.qmd
+      - part5.qmd
